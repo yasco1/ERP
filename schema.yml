@@ -1,0 +1,83 @@
+openapi: 3.0.3
+info:
+  title: ERP APIs
+  version: 1.0.0
+  description: ERP SYSTEM FOR ECO KK
+paths:
+  /auth/login/:
+    post:
+      operationId: auth_login_create
+      description: |-
+        Takes a set of user credentials and returns an access and refresh JSON web
+        token pair to prove the authentication of those credentials.
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JWTTokenObtain'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/JWTTokenObtain'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/JWTTokenObtain'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JWTTokenObtain'
+          description: ''
+  /auth/logout/:
+    post:
+      operationId: auth_logout_create
+      tags:
+      - auth
+      security:
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /auth/refresh/:
+    post:
+      operationId: auth_refresh_create
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      tags:
+      - auth
+      responses:
+        '200':
+          description: No response body
+  /auth/update_password/{uuid}:
+    put:
+      operationId: auth_update_password_update
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+        required: true
+      tags:
+      - auth
+      security:
+      - {}
+      responses:
+        '200':
+          description: No response body
+components:
+  schemas:
+    JWTTokenObtain:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+          writeOnly: true
+      required:
+      - email
+      - password
